@@ -1,0 +1,32 @@
+{
+  "name": "livedota_desktop",
+  "version": "0.0.0",
+  "description": "Testing",
+  "main": "index.js",
+  "scripts": {
+    "electron": "electron src/app",
+    "clean": "rm -rf ./dist/win",
+    "pack": "electron-packager ./",
+    "build": "npm run pack && electron-builder \"dist/win/EA Todo-win32-ia32\" --platform=win --out=\"dist/win\" --config=builder.json"
+  },
+  "author": "Aaron Goulden <github@joaogarin.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/joaogarin/angular2-electron/issues"
+  },
+  "homepage": "",
+  "engines": {
+    "node": ">= 4.2.1 <= 6",
+    "npm": ">= 3"
+  },
+  "devDependencies": {
+    "electron": "^1.4.15",
+    "electron-builder": "^13.11.1",
+    "electron-packager": "^8.5.2",
+    "jquery": "^3.1.1"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "windows": "0.0.6"
+  }
+}

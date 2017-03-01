@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>LiveDota Installer</title>
+    <script src="http://code.jquery.com/jquery-1.11.1.js" onload="window.$ = window.jQuery = module.exports;"></script>
+    <script src="./dist/js/bootstrap.min.js"></script>
+    <script src="./utils.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="./controller.js"></script>
+    <script src="http://institut-de-genomique.github.io/Ultimate-DataTable/js/momentjs.js" type="text/javascript" charset="utf-8"></script>
+    <script src="http://institut-de-genomique.github.io/Ultimate-DataTable/js/ultimate-datatable-3.3.1-SNAPSHOT.js" type="text/javascript" charset="utf-8"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Starter Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="./style.css" rel="stylesheet">
+    <link href="./w3.css" rel="stylesheet">
+    <link href="./dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="http://molecular-creations.co.uk:3000/socket.io/socket.io.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <style>
+      .map {
+        position: relative;
+        display: inline;
+      }
+      .mapicon {
+        position: absolute;
+        z-index: 1050;
+      }
+    </style>
+
+    <script>
+      const user = loadUserData()
+      const partyId = user.partyid;
+
+      var socket = io('http://molecular-creations.co.uk:3000');
+      var images = [];
+
+      const buildings = {
+        "dota_badguys_tower1_top" : {
+          "type": "tower",
+          "xPos": "-4910",
+          "yPos": "6000",
+          "team": "dire"
+        },
+        "dota_badguys_tower2_top" : {
+          "type": "tower",
+          "xPos": "-181",
+          "yPos": "6000",
+          "team": "dire"
+        },
+        "dota_badguys_tower3_top" : {
+          "type": "tower",
+          "xPos": "3350",
+          "yPos": "6000",
+          "team": "dire"
+        },
+        "dota_badguys_tower1_mid" : {
+          "type": "tower",
+          "xPos": "820",
+          "yPos": "630",
+          "team": "dire"
+        },
+        "dota_badguys_tower2_mid" : {
+          "type": "tower",
+          "xPos": "2360",
+          "yPos": "2227",
+          "team": "dire"
+        },
+        "dota_badguys_tower3_mid" : {
+          "type": "tower",
+          "xPos": "4088",
+          "yPos": "3613",
+          "team": "dire"
+        },
+        "dota_badguys_tower1_bot" : {
+          "type": "tower",
+          "xPos": "5990",
+          "yPos": "-1602",
+          "team": "dire"
+        },
+        "dota_badguys_tower2_bot" : {
+          "type": "tower",
+          "xPos": "6000",
+          "yPos": "380",
+          "team": "dire"
+        },
+        "dota_badguys_tower3_bot" : {
+          "type": "tower",
+          "xPos": "6037",
+          "yPos": "2893",
+          "team": "dire"
+        },
+        "bad_rax_range_mid" : {
+          "type": "barracks",
+          "xPos": "4157",
+          "yPos": "4292",
+          "team": "dire"
+        },
+        "bad_rax_melee_mid" : {
+          "type": "barracks",
+          "xPos": "4782",
+          "yPos": "3596",
+          "team": "dire"
+        },
+        "bad_rax_range_top" : {
+          "type": "barracks",
+          "xPos": "3903",
+          "yPos": "6314",
+          "team": "dire"
+        },
+        "bad_rax_melee_top" : {
+          "type": "barracks",
+          "xPos": "3910",
+          "yPos": "5700",
+          "team": "dire"
+        },
+        "bad_rax_range_bot" : {
+          "type": "barracks",
+          "xPos": "5843",
+          "yPos": "3498",
+          "team": "dire"
+        },
+        "bad_rax_melee_bot" : {
+          "type": "barracks",
+          "xPos": "6300",
+          "yPos": "3491",
+          "team": "dire"
+        },
+        "dota_goodguys_tower1_top" : {
+          "type": "tower",
+          "xPos": "-6600",
+          "yPos": "1661",
+          "team": "radiant"
+        },
+        "dota_goodguys_tower2_top" : {
+          "type": "tower",
+          "xPos": "-6600",
+          "yPos": "-500",
+          "team": "radiant"
+        },
+        "dota_goodguys_tower3_top" : {
+          "type": "tower",
+          "xPos": "-6679",
+          "yPos": "-3557",
+          "team": "radiant"
+        },
+        "dota_goodguys_tower1_mid" : {
+          "type": "tower",
+          "xPos": "-1799",
+          "yPos": "-1610",
+          "team": "radiant"
+        },
+        "dota_goodguys_tower2_mid" : {
+          "type": "tower",
+          "xPos": "-3679",
+          "yPos": "-2909",
+          "team": "radiant"
+        },
+        "dota_goodguys_tower3_mid" : {
+          "type": "tower",
+          "xPos": "-4800",
+          "yPos": "-4208",
+          "team": "radiant"
+        },
+        "dota_goodguys_tower1_bot" : {
+          "type": "tower",
+          "xPos": "4769",
+          "yPos": "-6205",
+          "team": "radiant"
+        },
+        "dota_goodguys_tower2_bot" : {
+          "type": "tower",
+          "xPos": "-253",
+          "yPos": "-6327",
+          "team": "radiant"
+        },
+        "dota_goodguys_tower3_bot" : {
+          "type": "tower",
+          "xPos": "-4085",
+          "yPos": "-6221",
+          "team": "radiant"
+        },
+        "good_rax_range_mid" : {
+          "type": "barracks",
+          "xPos": "-5201",
+          "yPos": "-4332",
+          "team": "radiant"
+        },
+        "good_rax_melee_mid" : {
+          "type": "barracks",
+          "xPos": "-4813",
+          "yPos": "-4676",
+          "team": "radiant"
+        },
+        "good_rax_range_top" : {
+          "type": "barracks",
+          "xPos": "-6865",
+          "yPos": "-3955",
+          "team": "radiant"
+        },
+        "good_rax_melee_top" : {
+          "type": "barracks",
+          "xPos": "-6317",
+          "yPos": "-3947",
+          "team": "radiant"
+        },
+        "good_rax_range_bot" : {
+          "type": "barracks",
+          "xPos": "-4473",
+          "yPos": "-5840",
+          "team": "radiant"
+        },
+        "good_rax_melee_bot" : {
+          "type": "barracks",
+          "xPos": "-4470",
+          "yPos": "-6358",
+          "team": "radiant"
+        }
+      };
+
+      let tableObject = null;
+      let globalTableData = [];
+      let playerState = [];
+
+      var canvas = null;
+      var context = null;
+
+      let mapHeight = 500;
+      let mapWidth = 500;
+      let iconRadius = 15;
+
+
+      function fetchImage(key, cb)
+      {
+
+        if(images[key])
+        {
+          cb(images[key]);
+        }
+
+        else {
+          var image = new Image();
+          image.src = key;
+
+          image.onerror = function() {
+            images[key] = null;
+            console.log('fail');
+          };
+          image.onabort = function() {
+            images[key] = null;
+            console.log('fail');
+
+          };
+
+          image.onload = function () {
+            images[key] = image;
+            cb(image);
+          }
+        }
+      }
+
+      window.onload = function() {
+          // Set up the map canvas.
+          canvas = document.getElementById('canvas');
+          c = canvas.getContext('2d');
+          var width = canvas.width;
+          var height = canvas.height;
+      };
+
+      setInterval( function () {
+
+        c.clearRect(0,0,mapWidth,mapHeight);
+
+        const direBuildings = globalTableData[0].buildings['dire'];
+        const radiantBuildings = globalTableData[0].buildings['radiant'];
+
+        //const radiantBuildings = globalTableData[0].buildings['radiant'];
+
+        if(direBuildings)
+        {
+          for (var key in direBuildings) {
+              drawBuilding(c, key, buildings, iconRadius, direBuildings[key]);
+          }
+        }
+
+        if(radiantBuildings)
+        {
+          for (var key in radiantBuildings) {
+              drawBuilding(c, key, buildings, iconRadius, radiantBuildings[key]);
+          }
+        }
+
+        for(i = 0; i < globalTableData.length; i++)
+        {
+          drawHeroOnMap(c, globalTableData[i], iconRadius);
+        }
+
+      console.log("rendering");
+
+      }, 100 );
+
+      socket.on(partyId, function(msg){
+
+        let data = JSON.parse(msg);
+        let playerToken = data.playerToken;
+        let state = data.payload.gamestate;
+        playerState[state.player.name] = state;
+
+        let updatedData = {
+            "username": state.player.name,
+            "steamid": state.player.steamid,
+            "hero": state.hero.name,
+            "kills": state.player.kills,
+            "deaths": state.player.deaths,
+            "assists": state.player.assists,
+            "lasthits": state.player.last_hits,
+            "denies": state.player.denies,
+            "gpm": state.player.gpm,
+            "xpm": state.player.xpm,
+            "denies": state.player.denies,
+            "items": state.items,
+            "herodata": state.hero,
+            "playerdata": state.player,
+            "buildings": state.buildings,
+            "abilities": state.abilities
+          };
+
+          // find the old row
+
+          let found = false;
+
+          for(i = 0; i < globalTableData.length; i++)
+          {
+            if(globalTableData[i].username == updatedData.username)
+            {
+              globalTableData[i] = updatedData;
+              found = true;
+              break;
+            }
+          }
+
+          if(!found)
+          {
+            globalTableData.push(updatedData);
+          }
+
+          //tableObject.setData(updatedData);
+
+      });
+
+    </script>
+
+  </head>
+
+  <body ng-app="ngAppDemo">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">LiveDota</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="index.html">Setup</a></li>
+            <li class="active"><a href="#party">Party Stats</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+  </nav>
+
+ <div class="container-fluid">
+   <div class="minimap-container">
+     <img src="./data/assets/map.jpg" height="500" width="500"></img>
+     <canvas class="minimap-overlay" id="canvas" width="500" height="500">
+
+     </canvas>
+   </div>
+    <div class="row">
+        <div ng-controller="ngAppDemoController">
+            <div class="col-md-12 col-lg-12" ultimate-datatable="datatable">
+            </div>
+        </div>
+    </div>
+ </div>
+
+
+</body>
+
+
+
+  <!-- Bootstrap core JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+
+  <script src="./dist/js/bootstrap.min.js"></script>
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+</html>

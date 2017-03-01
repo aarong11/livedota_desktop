@@ -1,0 +1,84 @@
+body {
+  position: absolute;
+  padding-top: 50px;
+}
+
+.starter-template {
+  padding: 40px 15px;
+  text-align: left;
+}
+.inventory {
+  padding:5px;
+  text-align: center;
+}
+.ability-cooldown {
+  padding:5px;
+  display:inline-block;
+  opacity: 0.75;
+}
+
+.ability-overlay {
+  height:30px;
+  width:30px;
+  position: absolute;
+  z-index:20;
+}
+
+.ability-countdown {
+  height:100%;
+  width:100%;
+  z-index:1;
+  font-family: "Times New Roman", Times, serif;
+  color: rgba(255,255,255, 1);
+  font-size:150%;
+  text-align:center;
+}
+
+.ability-unlevelled {
+ -webkit-filter: blur(2.5px);
+ -moz-filter: blur(2.5px);
+ -o-filter: blur(2.5px);
+ -ms-filter: blur(2.5px);
+ filter: blur(2.5px);
+ opacity:0.25;
+}
+
+.ability {
+   display:inline-block;
+   padding:5px;
+}
+
+.ability-img {
+  height:30px;
+  width:30px;
+  position: relative;
+}
+
+.ability-levelled {
+  -webkit-filter: blur(0px);
+  -moz-filter: blur(0px);
+  -o-filter: blur(0px);
+  -ms-filter: blur(0px);
+  filter: blur(0px);
+}
+
+.ability-ready {
+  opacity:1.0;
+}
+.minimap-container {
+  position: relative;
+  overflow: hidden;
+  width:"100%";
+  height:"100%";
+  display:block;
+  float:right;
+  margin:2%;
+}
+.minimap-overlay {
+  position: absolute;
+  background: rgba(100,100,100,0);
+  width:"100%";
+  height:"100%";
+  top:0px;
+  left:0px;
+}
