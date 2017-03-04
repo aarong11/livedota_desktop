@@ -89,8 +89,7 @@ module.exports = {
       }),
 
       new CopyWebpackPlugin([{ from: './desktop_client_electron', to: '../'}]),
-
-
+      new CopyWebpackPlugin([{ from: './src/templates', to: './templates'}]),
       new CopyWebpackPlugin([{ from: './data', to: './data'}]),
 
       new webpack.ProvidePlugin({

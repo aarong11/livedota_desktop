@@ -20,7 +20,6 @@
   "exclude": [
     "plugins",
     ".git",
-    "node_modules",
     "typings/globals/cordova/**/*.*",
     "www/dist",
     ".vscode"

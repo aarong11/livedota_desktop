@@ -1,13 +1,22 @@
 var jQuery = require("jquery");
 var CONSTANTS = require('./constants.js');
 var path = require('path');
-var fs = require('fs');
-var electron = require('electron');
-var remote = electron.remote;
-var electronDirectory = require('electron-directory');
-
+var isElectronRenderer = require('is-electron-renderer');
 var abilityData = {};
 var heroData = {};
+
+var fs = null;
+var windows = null;
+var electron = null;
+var remote = null;
+
+if(isElectronRenderer)
+{
+  electron = require('electron');
+  remote = electron.remote;
+  fs = remote.require('fs');
+  windows = remote.require('windows');
+}
 
 jQuery.getJSON(CONSTANTS.resourcePath + "abilities.json", function(json) {
   abilityData = json;
@@ -20,15 +29,7 @@ jQuery.getJSON(CONSTANTS.resourcePath + "heroes.json", function(json) {
 var self = module.exports = {
 
   isElectron:function() {
-    if (typeof require !== 'function') return false;
-    if (typeof window !== 'object') return false;
-    try {
-      const electron = require('electron');
-      if (typeof electron !== 'object') return false;
-    } catch(e) {
-      return false;
-    }
-    return true;
+    return isElectronRenderer;
   },
 
 
@@ -155,12 +156,18 @@ var self = module.exports = {
   getInstallLocation:function()
   {
 
+    if(!self.isElectron())
+    {
+      return "web";
+    }
     // This is the case for both 32 and 64 bit versions of windows.
     if(process.platform === "win32")
     {
       // Try to find it in the registry.
-      var windows = remote.require('windows');
 
+      var electron = require('electron');
+      var remote = electron.remote;
+      var windows = remote.require('windows');
       var path = windows.registry(CONSTANTS.steamRegistryKey).SteamPath;
 
       // Guess the defaults

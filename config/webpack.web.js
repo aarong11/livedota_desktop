@@ -4,9 +4,8 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var helpers = require('./helpers');
 var webpackMerge = require('webpack-merge');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var helpers = require('./helpers');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
-var webpackTargetElectronRenderer = require('webpack-target-electron-renderer');
+var nodeExternals = require('webpack-node-externals');
 
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 
@@ -36,6 +35,14 @@ module.exports = {
           }],
         },
         {
+          test: /\.js/,
+          exclude: /node_modules/,
+          loader: 'babel-loader',
+          query: {
+            presets: ['es2015']
+          }
+        },
+        {
           test: /\.html$/,
           loader: 'html-loader'
         },
@@ -49,15 +56,14 @@ module.exports = {
         }
       ]
     },
+
     resolve: {
         extensions: [".ts", ".js"]
     },
 
     node: {
       console: true,
-      fs: 'empty',
-      net: 'empty',
-      tls: 'empty',
+      fs: "empty",
       child_process: "empty",
       process: true
     },
@@ -85,10 +91,12 @@ module.exports = {
       }),
 
       new HtmlWebpackPlugin({
-        template: 'src/index.html'
+        template: 'src/index.html',
+
       }),
 
       new CopyWebpackPlugin([{ from: './data', to: './data'}]),
+      new CopyWebpackPlugin([{ from: './src/templates', to: './templates'}]),
 
       new webpack.ProvidePlugin({
         $: "jquery",
