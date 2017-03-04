@@ -5,6 +5,7 @@
     <title>LiveDota Installer</title>
     <script src="http://code.jquery.com/jquery-1.11.1.js" onload="window.$ = window.jQuery = module.exports;"></script>
     <script src="./dist/js/bootstrap.min.js"></script>
+
     <script src="./utils.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
     <script src="./controller.js"></script>
@@ -21,7 +22,6 @@
 
     <!-- Bootstrap core CSS -->
     <link href="./style.css" rel="stylesheet">
-    <link href="./w3.css" rel="stylesheet">
     <link href="./dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -45,7 +45,7 @@
 
     <script>
       const user = loadUserData()
-      const partyId = user.partyid;
+      const partyId = "826df0d0";
 
       var socket = io('http://molecular-creations.co.uk:3000');
       var images = [];
@@ -257,14 +257,6 @@
           var image = new Image();
           image.src = key;
 
-          image.onerror = function() {
-            images[key] = null;
-            console.log('fail');
-          };
-          image.onabort = function() {
-            images[key] = null;
-          };
-
           image.onload = function () {
             images[key] = image;
             cb(image);
@@ -308,14 +300,10 @@
           drawHeroOnMap(c, globalTableData[i], iconRadius);
         }
 
-      console.log("rendering");
 
-      }, 100 );
+      }, 1000 );
 
       socket.on(partyId, function(msg){
-
-        console.log(msg);
-        
 
         let data = JSON.parse(msg);
         let playerToken = data.playerToken;
@@ -363,48 +351,15 @@
           //tableObject.setData(updatedData);
 
       });
-
     </script>
-
   </head>
-
-  <body ng-app="ngAppDemo">
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">LiveDota</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="index.html">Setup</a></li>
-            <li class="active"><a href="#party">Party Stats</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-  </nav>
-
- <div class="container-fluid">
-   <div class="minimap-container">
+  <div>
+   <div class="fullmap">
      <img src="./data/images/map.jpg" height="500" width="500"></img>
      <canvas class="minimap-overlay" id="canvas" width="500" height="500">
-
      </canvas>
    </div>
-    <div class="row">
-        <div ng-controller="ngAppDemoController">
-            <div class="col-md-12 col-lg-12" ultimate-datatable="datatable">
-            </div>
-        </div>
-    </div>
- </div>
-
-
+</div>
 </body>
 
 

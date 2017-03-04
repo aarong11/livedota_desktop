@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <base href="./">
+    <title>dota.watch</title>
     <meta charset="UTF-8">
-    <title>LiveDota Installer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 
-    <script src="./dist/js/jquery-3.1.1.min.js" onload="window.$ = window.jQuery = module.exports;"></script>
-    <script src="./dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        var isCordova = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+        var isElectron = window && window.process && window.process.type;
+        if (isElectron) {
+            isCordova = false;
+            isElectron = true;
+            window.electron = require('electron');
+            if (typeof module === 'object') { window.module = module; module = undefined; }
+        }
+    </script>
 
-
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-    <script src="./utils.js"></script>
-    <script src="./controller.js"></script>
-
+    <script src="./cordova.js"></script>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,9 +28,6 @@
 
     <title>Starter Template for Bootstrap</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="./style.css" rel="stylesheet">
-    <link href="./dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 
@@ -73,10 +76,9 @@
 
 </body>
 
+
   <!-- Bootstrap core JavaScript
   ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
-
-  <script src="./dist/js/bootstrap.min.js"></script>
   <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 </html>

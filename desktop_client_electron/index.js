@@ -3,7 +3,6 @@
 const electron = require('electron')
 // Module to control application life.
 const app = electron.app
-
 // browser-window creates a native window
 const BrowserWindow = electron.BrowserWindow
 
@@ -20,9 +19,14 @@ app.on('ready', function () {
   // Initialize the window to our specified dimensions
   mainWindow = new BrowserWindow({ width: 1200, height: 900 });
 
-  // Tell Electron where to load the entry point from
-  mainWindow.loadURL('file://' + __dirname + '/index.html');
-  
+  let url = require('url').format({
+    protocol: 'file',
+    slashes: true,
+    pathname: require('path').join(__dirname, 'www', 'index.html')
+  });
+
+  mainWindow.loadURL(url);
+
   mainWindow.webContents.openDevTools()
 
   // Clear out the main window when the app is closed

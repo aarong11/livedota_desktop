@@ -1,19 +1,27 @@
+import './style/style.css';
+
+var sharedUtil = require('./lib/shared_util.js');
+var dataStorage = require('./lib/data_storage.js');
+
 angular.module('App', [])
   .controller('MainController', ['$scope', function($scope) {
 
     $scope.init = function () {
-        const data = loadUserData();
+        var data = sharedUtil.loadUserData();
         $scope.user = data;
     };
 
-
     $scope.updateCfg = function(user) {
-      checkGameStateDir();
-      modifyCFG(user.partyid, user.username);
-      saveUserData(user);
-    };
 
-  }]);
+      // We only want to try and save a CFG if they are using a desktop client.
+      if(sharedUtil.isElectron())
+      {
+        sharedUtil.saveCFG(user.partyid, user.username);
+      }
+
+      sharedUtil.saveUserData(user);
+    };
+}]);
 
   angular.module('ngAppDemo', ['ultimateDataTableServices']).controller('ngAppDemoController', ['$scope','datatable',function($scope,datatable) {
 
@@ -111,19 +119,12 @@ angular.module('App', [])
                            + '<img class="inventory" src=' + getItemImage(value.items.slot3.name) + ' height="40" width="40"></img>'
                            + '<img class="inventory" src=' + getItemImage(value.items.slot4.name) + ' height="40" width="40"></img>'
                            + '<img class="inventory"  src=' + getItemImage(value.items.slot5.name) + ' height="40" width="40"></img>'
-                    }
-                },
-                {
-                    "header":"",
-                    "property":"abilities",
-                    "order":false,
-                    "type":"text",
-                    "edit":false,
-                    "render" : function(value, line){
-                      return '<div class="' + getAbilityClass(value.abilities.ability0) + '" id="' + value.steamid + '_ability0" class="ability"><div class="ability-overlay"><div class="ability-countdown">' + value.abilities.ability0.cooldown + '</div></div><img class="ability-img" src=' + getSkillImage(value.abilities.ability0.name) + '></img></div>'
-                           + '<div class="' + getAbilityClass(value.abilities.ability1) + '" id="' + value.steamid + '_ability1" class="ability"><div class="ability-overlay"><div class="ability-countdown">' + value.abilities.ability1.cooldown + '</div></div><img class="ability-img" src=' + getSkillImage(value.abilities.ability1.name) + '></img></div>'
-                           + '<div class="' + getAbilityClass(value.abilities.ability2) + '" id="' + value.steamid + '_ability2" class="ability"><div class="ability-overlay"><div class="ability-countdown">' + value.abilities.ability2.cooldown + '</div></div><img class="ability-img" src=' + getSkillImage(value.abilities.ability2.name) + '></img></div>'
-                           + '<div class="' + getAbilityClass(value.abilities.ability3) + '" id="' + value.steamid + '_ability3" class="ability"><div class="ability-overlay"><div class="ability-countdown">' + value.abilities.ability3.cooldown + '</div></div><img class="ability-img" src=' + getSkillImage(value.abilities.ability3.name) + '></img></div>'
+                           + '<br/>'
+                           + '<img class="inventory" src=' + getSkillImage(value.abilities.ability0.name) + ' height="40" width="40"></img>'
+                           + '<img class="inventory" src=' + getSkillImage(value.abilities.ability1.name) + ' height="40" width="40"></img>'
+                           + '<img class="inventory" src=' + getSkillImage(value.abilities.ability2.name) + ' height="40" width="40"></img>'
+                           + '<img class="inventory" src=' + getSkillImage(value.abilities.ability3.name) + ' height="40" width="40"></img>'
+
                     }
                 },
                 {
@@ -183,7 +184,6 @@ angular.module('App', [])
         $scope.datatable.setData(globalTableData);
 
         setInterval( function () {
-
           $scope.datatable.setData(globalTableData);
         }, 1000 );
 
